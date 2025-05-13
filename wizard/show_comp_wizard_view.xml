@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_show_component_wizard_form" model="ir.ui.view">
+        <field name="name">show.component.wizard.form</field>
+        <field name="model">show.component.wizard</field>
+        <field name="arch" type="xml">
+            <form string="All Components of Pack">
+                <group>
+                    <field name="component_line_ids">
+                        <tree>
+                            <field name="component_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"/>
+                            <field name="source_pack_id" string="From Pack"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+
+    <record id="action_show_comp" model="ir.actions.act_window">
+        <field name="name">Show All component</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">show.component.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_show_component_wizard_form" />
+        <field name="target">new</field>
+    </record>
+
+</odoo>

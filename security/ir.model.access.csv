@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_pack_product_sale_order_line,sale.order.line.access,model_sale_order_line,base.group_user,1,1,1,1
+
+access_pack_product_template,product.template.access,model_product_template,base.group_user,1,1,1,1
+access_pack_product_line,pack.product.line,model_pack_product_line,base.group_user,1,1,1,1
+
+access_show_component_wizard,show.component.wizard,model_show_component_wizard,base.group_user,1,1,1,1
+access_show_component_wizard_line,show.component.wizard.line,model_show_component_wizard_line,base.group_user,1,1,1,1
