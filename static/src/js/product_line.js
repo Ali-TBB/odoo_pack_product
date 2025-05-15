@@ -1,8 +1,8 @@
-odoo.define('pack_product.sale_order_line_color', function (require) {
+odoo.define('odoo_pack_product.sale_order_line_color', function (require) {
     "use strict";
     
     var ListRenderer = require('web.ListRenderer');
-    
+    console.log("js file loaded"); 
     ListRenderer.include({
         _renderRow: function (record) {
             var $row = this._super.apply(this, arguments);

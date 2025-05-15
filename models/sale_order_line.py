@@ -10,36 +10,51 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
-        if self.product_id.is_pack:
-            # Prepare component lines data (won't create them yet)
-            component_data = []
-            for component in self.product_id.pack_component_ids:
-                component_data.append((0, 0, {
-                    'order_id': self.order_id.id,
-                    'product_id': component.component_id.id,
-                    'product_uom_qty': component.quantity * self.product_uom_qty,
-                    'price_unit': component.component_id.list_price,
-                    'is_pack_component': True,
-                    'pack_parent_line_id': self.id,
-                    'product_uom': component.component_id.uom_id.id,
-                    'tax_id': [(6, 0, component.component_id.taxes_id.ids)]
-                }))
+        if not self.order_id or not self.product_id:
+            return
 
+        if self.product_id.is_pack:
+            component_lines = []
+            for component in self.product_id.pack_component_ids:
+                # Handle recursive sub-packs
+                if component.component_id.is_pack:
+                    sub_components = self.product_id.product_tmpl_id.get_all_components(component)
+                    for sub in sub_components:
+                        component_lines.append((0, 0, {
+                            'product_id': sub.component_id.id,
+                            'product_uom_qty': sub.quantity * self.product_uom_qty,
+                            'price_unit': sub.component_id.list_price,
+                            'is_pack_component': True,
+                            'pack_parent_line_id': self.id,
+                            'product_uom': sub.component_id.uom_id.id,
+                            'tax_id': [(6, 0, sub.component_id.taxes_id.ids)],
+                        }))
+                else:
+                    component_lines.append((0, 0, {
+                        'product_id': component.component_id.id,
+                        'product_uom_qty': component.quantity * self.product_uom_qty,
+                        'price_unit': component.component_id.list_price,
+                        'is_pack_component': True,
+                        'pack_parent_line_id': self.id,
+                        'product_uom': component.component_id.uom_id.id,
+                        'tax_id': [(6, 0, component.component_id.taxes_id.ids)],
+                    }))
+
+            # Important: return the updated lines directly to the form
             return {
                 'value': {
                     'price_unit': self.product_id.pack_price,
-                    'price_total': 0.0,
-                },
-                'domain': {
-                    'order_id': [('id', '=', self.order_id.id)]
+                    'order_line': component_lines,
                 }
             }
-        elif not self.product_id.is_pack:
-            # Clear any existing pack components if product changes to non-pack
-            self.env['sale.order.line'].search([
-                ('pack_parent_line_id', '=', self.id),
-                ('order_id', '=', self.order_id.id)
-            ]).unlink()
+
+        else:
+            # Not a pack: clear sub-lines
+            return {
+                'value': {
+                    'order_line': [],
+                }
+            }
 
     @api.model
     def create(self, vals):

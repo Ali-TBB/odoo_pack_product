@@ -85,3 +85,28 @@ class ProductTemplate(models.Model):
                     # Recursively get components of sub-components
                     components.extend(self.get_all_components(sub_component))
         return components
+
+    def get_all_pack_components(self, quantity=1.0):
+        components = []
+        for line in self.pack_component_ids:
+            if line.component_id.is_pack:
+                sub_components = self.get_all_components(line)
+                for sub in sub_components:
+                    components.append({
+                        'product_id': sub.component_id.id,
+                        'name': sub.component_id.name,
+                        'quantity': sub.quantity * quantity,
+                        'uom_id': sub.component_id.uom_id.id,
+                        'price_unit': sub.component_id.list_price,
+                        'tax_ids': sub.component_id.taxes_id.ids,
+                    })
+            else:
+                components.append({
+                    'product_id': line.component_id.id,
+                    'name': line.component_id.name,
+                    'quantity': line.quantity * quantity,
+                    'uom_id': line.component_id.uom_id.id,
+                    'price_unit': line.component_id.list_price,
+                    'tax_ids': line.component_id.taxes_id.ids,
+                })
+        return components

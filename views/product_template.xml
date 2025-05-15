@@ -18,8 +18,8 @@
                             <field name="quantity" />
                             <field name="uom_id" />
                         </tree>
-                            <button id="button_show_all" name="action_show_comp" type="action" string="Show All"
-                            class="btn-primary"/>
+                            <!-- <button id="button_show_all" name="action_show_comp" type="action" string="Show All"
+                            class="btn-primary"/> -->
                     </field>
                 </page>
             </xpath>
