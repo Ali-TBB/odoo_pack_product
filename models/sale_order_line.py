@@ -85,7 +85,7 @@ class SaleOrderLine(models.Model):
             for component in self.product_id.pack_component_ids:
                 if component.component_id.is_pack:
                     # If the component is also a pack, create its components too
-                    sub_components = self.product_id.get_all_components(component)
+                    sub_components = self.product_id.product_tmpl_id.get_all_components(component)
                     for sub_component in sub_components:
                         new_components.append({
                             'order_id': self.order_id.id,

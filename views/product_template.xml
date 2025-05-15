@@ -18,9 +18,12 @@
                             <field name="quantity" />
                             <field name="uom_id" />
                         </tree>
-                            <!-- <button id="button_show_all" name="action_show_comp" type="action" string="Show All"
-                            class="btn-primary"/> -->
                     </field>
+                    <button name="%(action_show_comp)d"
+                        type="action"
+                        string="Show All"
+                        class="btn-primary"
+                        context="{'active_id': active_id}" />
                 </page>
             </xpath>
         </field>

@@ -17,7 +17,7 @@
     },
     'data': [
         'security/ir.model.access.csv',
-        # 'wizard/show_comp_wizard_view.xml',
+        'wizard/show_comp_wizard_view.xml',
         'views/product_template.xml',
         'views/sale_order_line.xml',
         'views/color_change.xml'

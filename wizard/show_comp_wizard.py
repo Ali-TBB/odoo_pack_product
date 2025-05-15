@@ -23,7 +23,7 @@ class ShowComponentWizard(models.TransientModel):
         all_components = []
         for line in product.pack_component_ids:
             if line.component_id.is_pack:
-                nested = line.get_all_components(line)
+                nested = product.get_all_components(line)
                 all_components.extend(nested)
             else:
                 all_components.append(line)
