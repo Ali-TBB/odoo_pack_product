@@ -53,7 +53,7 @@ class PackProductLine(models.Model):
                         'message': "You are selecting a pack as a component. Are you sure you want to proceed?"
                     }
                 }
-        if isinstance(self.pack_product_id.id, models.NewId) and self.component_id.id == self.pack_product_id.id.origin:
+        if self.component_id.id == self.pack_product_id.id.origin and self.component_id.id != False:
             self.component_id = False
             message = {
                 'warning': {
